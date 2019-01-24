@@ -1,0 +1,2 @@
+include *.txt *.ini *.cfg *.rst
+recursive-include rotatesecretkey *.ico *.png *.css *.gif *.jpg *.txt *.js *.html *.xml
