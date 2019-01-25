@@ -37,6 +37,7 @@ be supported in version 1.0.
 
 Getting It
 ============
+::
 
     $ pip install django-rotate-secret-key
 
@@ -44,50 +45,41 @@ Installing It
 ==============
 
 This is safe to do even before you decide to rotate your keys,
-it basically has no effect before you change the settings.
+it basically has no effect before you change the settings.::
 
-```python
     INSTALLED_APPS = (
         ...
         'rotatesecretkey',
         ...
     )
-```
 
 Settings
 ============
 
-Replace AuthenticationMiddleware with RotateAuthenticationMiddleware
+Replace AuthenticationMiddleware with RotateAuthenticationMiddleware::
 
-```python
     MIDDLEWARE = [
         ...
         # 'django.contrib.auth.middleware.AuthenticationMiddleware',
         'rotatesecretkey.middleware.RotateAuthenticationMiddleware',
         ...
     ]
-```
 
-Replace SESSION_ENGINE
+Replace SESSION_ENGINE::
 
-```
     SESSION_ENGINE = 'rotatesecretkey.sessions'
-```
 
-Add the old secret key into OLD_SECRET_KEY, and create a new ``SECRET_KEY``.
+Add the old secret key into OLD_SECRET_KEY, and create a new ``SECRET_KEY``.::
 
-```python
     SECRET_KEY = 'NEWRANDOMKEY'
     OLD_SECRET_KEY = 'your_previous_secret_key_that_you_want_to_support'
-```
 
 Once these changes go live your website will decode old sessions with
 the OLD_SECRET_KEY and resign them with the new ``SECRET_KEY``.
 
-After some time (like 1 or 2 months) you should roll these changes back and just keep the ``SECRET_KEY``.
+After some time (like 1 or 2 months) you should roll these changes back and just keep the ``SECRET_KEY``.::
 
-```
     SECRET_KEY = 'NEWRANDOMKEY'
-```
+
 You don't want to support ``OLD_SECRET_KEY`` forever but long enough to give your visitors a
 chance to visit the website and rewrite their sessions with the new key.
