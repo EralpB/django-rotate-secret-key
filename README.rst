@@ -29,13 +29,19 @@ So optimal schedule would be
 If a user comes back to the website after x months, his session will be invalidated.
 But for all the regular users this should be seamless transition.
 
+Compatibility
+=============
+
+If you are using JWT tokens created by ``django-rest-framework-jwt``, currently package is not compatible. But it will
+be supported in version 1.0.
+
 Getting It
 ============
 
     $ pip install django-rotate-secret-key
 
 Installing It
-============
+==============
 
 This is safe to do even before you decide to rotate your keys,
 it basically has no effect before you change the settings.
