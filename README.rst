@@ -46,7 +46,7 @@ Installing It
 This is safe to do even before you decide to rotate your keys,
 it basically has no effect before you change the settings.
 
-```
+```python
     INSTALLED_APPS = (
         ...
         'rotatesecretkey',
@@ -59,7 +59,7 @@ Settings
 
 Replace AuthenticationMiddleware with RotateAuthenticationMiddleware
 
-```
+```python
     MIDDLEWARE = [
         ...
         # 'django.contrib.auth.middleware.AuthenticationMiddleware',
