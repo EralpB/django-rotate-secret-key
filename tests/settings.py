@@ -42,5 +42,3 @@ TEMPLATES = [
 ]
 
 SESSION_ENGINE = 'rotatesecretkey.sessions'
-
-SESSION_SAVE_EVERY_REQUEST = True
