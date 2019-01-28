@@ -32,8 +32,7 @@ But for all the regular users this should be seamless transition.
 Compatibility
 =============
 
-If you are using JWT tokens created by ``django-rest-framework-jwt``, currently package is not compatible. But it will
-be supported in version 1.0.
+If you are using JWT tokens created by ``django-rest-framework-jwt``, currently package is not compatible.
 
 Getting It
 ============
@@ -83,3 +82,16 @@ After some time (like 1 or 2 months) you should roll these changes back and just
 
 You don't want to support ``OLD_SECRET_KEY`` forever but long enough to give your visitors a
 chance to visit the website and rewrite their sessions with the new key.
+
+Things to keep in mind
+======================
+
+This library allows keeping Sessions intact and allowing seamless transition for your visitors, if you are using
+Django's signing features manually for other purposes (like signing your backups etc.) a generic library cannot take it
+into account.
+
+What SECRET_KEY doesn't break
+=============================
+
+Even if you don't use this library SECRET_KEY is not used to encrypt user password or OAUTH tokens. So you shouldn't
+worry about them during your key rotation.
