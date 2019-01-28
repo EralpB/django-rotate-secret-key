@@ -35,6 +35,9 @@ def get_user(request):
                         salted_hmac(key_salt, user.password, secret=settings.OLD_SECRET_KEY).hexdigest()
                     )
 
+                    request.session.cycle_key()
+                    request.session[HASH_SESSION_KEY] = user.get_session_auth_hash()
+
                 if not session_hash_verified:
                     request.session.flush()
                     user = None

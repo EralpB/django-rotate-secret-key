@@ -6,7 +6,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 
 setup(
     name='django-rotate-secret-key',
-    version='0.2',
+    version='0.3',
     packages=['rotatesecretkey'],
     description='Rotate your Django secret',
     long_description=README,

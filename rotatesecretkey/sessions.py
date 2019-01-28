@@ -10,7 +10,7 @@ class SessionStore(BaseSessionStore):
 
     def _hash(self, value):
         key_salt = "django.contrib.sessions" + self.__class__.__name__
-        secret = settings.OLD_SECRET_KEY if self.try_old_key else None
+        secret = getattr(settings, 'OLD_SECRET_KEY', None) if self.try_old_key else None
         # clear the try_old_key bit for future tries
         self.try_old_key = False
         return salted_hmac(key_salt, value, secret=secret).hexdigest()
