@@ -8,6 +8,10 @@ Compatible with modern Django versions. At the moment of writing that's includin
 
 I haven't found any library to allow us to do this on our production website, so I started the library.
 
+Medium Post
+============
+https://medium.com/@bayraktar.eralp/changing-rotating-django-secret-key-without-logging-users-out-804a29d3ea65?sk=6fe95fa587574e5875b630617f3ecc91
+
 Problem
 ============
 Once you change the ``SECRET_KEY`` on production, all the old sessions and cookies are invalidated,
