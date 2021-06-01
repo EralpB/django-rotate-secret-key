@@ -28,7 +28,7 @@ def get_user(request):
                     session_hash,
                     user.get_session_auth_hash()
                 )
-                if not session_hash_verified:
+                if not session_hash_verified and hasattr(settings, 'OLD_SECRET_KEY'):
                     key_salt = "django.contrib.auth.models.AbstractBaseUser.get_session_auth_hash"
                     session_hash_verified = session_hash and constant_time_compare(
                         session_hash,
