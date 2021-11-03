@@ -5,6 +5,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.messages',
     'rotatesecretkey',
 )
 
@@ -22,6 +23,7 @@ ROOT_URLCONF = 'tests.urls'
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'rotatesecretkey.middleware.RotateAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
 
@@ -41,4 +43,6 @@ TEMPLATES = [
     },
 ]
 
-SESSION_ENGINE = 'rotatesecretkey.sessions'
+SESSION_ENGINE = 'rotatesecretkey.sessions.db'
+
+SILENCED_SYSTEM_CHECKS = ['admin.E408']

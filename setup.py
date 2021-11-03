@@ -15,6 +15,6 @@ setup(
     url='https://github.com/EralpB/django-rotate-secret-key/',
     license='MIT',
     install_requires=[
-        'Django>=1.6',
+        'Django>=2.2',
     ]
 )
