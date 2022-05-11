@@ -1,9 +1,10 @@
 import logging
 
 import django
-from django.contrib.sessions.backends.base import SessionBase, salted_hmac
+from django.contrib.sessions.backends.base import SessionBase
 from django.conf import settings
 from django.core import signing
+from django.utils.crypto import salted_hmac
 
 
 class RotateSecretKeyMixIn(SessionBase):

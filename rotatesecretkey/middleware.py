@@ -50,7 +50,11 @@ def get_user(request):
                     key_salt = "django.contrib.auth.models.AbstractBaseUser.get_session_auth_hash"  # noqa
                     compare_kwargs = {}
                     if django.VERSION >= (3, 1):
-                        compare_kwargs['algorithm'] = settings.DEFAULT_HASHING_ALGORITHM  # noqa
+                        compare_kwargs['algorithm'] = (
+                            settings.DEFAULT_HASHING_ALGORITHM
+                            if django.VERSION < (4, 0)
+                            else "sha256"
+                        )
                     session_hash_verified = session_hash and constant_time_compare(  # noqa
                         session_hash,
                         salted_hmac(
