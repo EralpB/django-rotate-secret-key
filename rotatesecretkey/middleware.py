@@ -1,7 +1,13 @@
+import django
 from django.utils.deprecation import MiddlewareMixin
 from django.contrib.auth import settings
 from django.utils.functional import SimpleLazyObject
-from django.contrib.auth import _get_user_session_key, BACKEND_SESSION_KEY, load_backend, HASH_SESSION_KEY
+from django.contrib.auth import (
+    _get_user_session_key,
+    BACKEND_SESSION_KEY,
+    load_backend,
+    HASH_SESSION_KEY,
+)
 from django.utils.crypto import constant_time_compare, salted_hmac
 
 
@@ -24,19 +30,43 @@ def get_user(request):
             # Verify the session
             if hasattr(user, 'get_session_auth_hash'):
                 session_hash = request.session.get(HASH_SESSION_KEY)
-                session_hash_verified = session_hash and constant_time_compare(
-                    session_hash,
-                    user.get_session_auth_hash()
-                )
-                if not session_hash_verified and hasattr(settings, 'OLD_SECRET_KEY'):
-                    key_salt = "django.contrib.auth.models.AbstractBaseUser.get_session_auth_hash"
-                    session_hash_verified = session_hash and constant_time_compare(
+                session_hash_verified = (
+                    session_hash and
+                    constant_time_compare(
                         session_hash,
-                        salted_hmac(key_salt, user.password, secret=settings.OLD_SECRET_KEY).hexdigest()
+                        user.get_session_auth_hash()
+                    )
+                )
+                if not session_hash_verified:
+                    session_hash_verified = (
+                        session_hash and
+                        hasattr(user, '_legacy_get_session_auth_hash') and
+                        constant_time_compare(
+                            session_hash,
+                            user._legacy_get_session_auth_hash(),
+                        )
+                    )
+                if not session_hash_verified and hasattr(settings, 'OLD_SECRET_KEY'):  # noqa
+                    key_salt = "django.contrib.auth.models.AbstractBaseUser.get_session_auth_hash"  # noqa
+                    compare_kwargs = {}
+                    if django.VERSION >= (3, 1):
+                        compare_kwargs['algorithm'] = (
+                            settings.DEFAULT_HASHING_ALGORITHM
+                            if django.VERSION < (4, 0)
+                            else "sha256"
+                        )
+                    session_hash_verified = session_hash and constant_time_compare(  # noqa
+                        session_hash,
+                        salted_hmac(
+                            key_salt,
+                            user.password,
+                            secret=settings.OLD_SECRET_KEY,
+                            **compare_kwargs
+                        ).hexdigest()
                     )
 
                     request.session.cycle_key()
-                    request.session[HASH_SESSION_KEY] = user.get_session_auth_hash()
+                    request.session[HASH_SESSION_KEY] = user.get_session_auth_hash()  # noqa
 
                 if not session_hash_verified:
                     request.session.flush()
@@ -57,6 +87,6 @@ class RotateAuthenticationMiddleware(MiddlewareMixin):
             "The Django authentication middleware requires session middleware "
             "to be installed. Edit your MIDDLEWARE%s setting to insert "
             "'django.contrib.sessions.middleware.SessionMiddleware' before "
-            "'django.contrib.auth.middleware.AuthenticationMiddleware'."
+            "'rotatesecretkey.middleware.RotateAuthenticationMiddleware'."
         ) % ("_CLASSES" if settings.MIDDLEWARE is None else "")
         request.user = SimpleLazyObject(lambda: cached_get_user(request))

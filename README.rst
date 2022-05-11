@@ -4,7 +4,7 @@ Django Rotate Secret Key
 
 Helps rotating your secret keys safely without losing user sessions, which means without logging users out.
 
-Compatible with modern Django versions. At the moment of writing that's including 1.11 and 2.0 on Python 3.7.
+Compatible with Django versions 2.2, 3.1 and 3.2.
 
 I haven't found any library to allow us to do this on our production website, so I started the library.
 
